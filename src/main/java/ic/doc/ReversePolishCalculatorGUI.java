@@ -1,30 +1,34 @@
 package ic.doc;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.JFrame;
+import javax.swing.JTextField;
+import javax.swing.JPanel;
+import javax.swing.JButton;
+import java.awt.Color;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ReversePolishCalculatorGUI implements UpdatableView {
+public class ReversePolishCalculatorGui implements UpdatableView {
     private final JFrame frame;
     private final JTextField resultField;
     private final JTextField errorField;
 
-    ReversePolishCalculatorGUI(ActionListener operationController,
+    ReversePolishCalculatorGui(ActionListener operationController,
                                ActionListener clearController) {
 
         resultField = new JTextField(5);
         resultField.setEditable(false);
-        errorField = new JTextField(30);
+        errorField = new JTextField(20);
         errorField.setEditable(false);
         errorField.setBackground(Color.LIGHT_GRAY);
         errorField.setForeground(Color.RED);
 
         List<JButton> operationButtons = new ArrayList<>();
-        String operations = "1234567890+-*/";
-        for (String op : operations.split(""))
+        String operations = "123456789+0-*/";
+        for (String op : operations.split("")) {
             operationButtons.add(new JButton(op));
+        }
         JButton clearButton = new JButton("C");
 
         operationButtons.forEach(b -> b.addActionListener(operationController));
@@ -37,21 +41,21 @@ public class ReversePolishCalculatorGUI implements UpdatableView {
         panel.add(errorField);
 
         frame = new JFrame("Reverse Polish Calculator");
-        frame.setSize(400, 300);
+        frame.setSize(250, 270);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.add(panel);
     }
 
     public static void main(String[] args) {
-        StackCalculator stackCalculator = new StackCalculator();
+        ReversePolishCalculator reversePolishCalculator = new ReversePolishCalculator();
         ActionListener operationController =
-                e -> stackCalculator.push(e.getActionCommand().charAt(0));
-        ActionListener clearController = e -> stackCalculator.clear();
+                e -> reversePolishCalculator.push(e.getActionCommand().charAt(0));
+        ActionListener clearController = e -> reversePolishCalculator.clear();
 
-        ReversePolishCalculatorGUI calculatorGUI =
-                new ReversePolishCalculatorGUI(operationController, clearController);
-        stackCalculator.addObserver(calculatorGUI);
-        calculatorGUI.display();
+        ReversePolishCalculatorGui calculatorGui =
+                new ReversePolishCalculatorGui(operationController, clearController);
+        reversePolishCalculator.addObserver(calculatorGui);
+        calculatorGui.display();
     }
 
     private void display() {
@@ -59,8 +63,8 @@ public class ReversePolishCalculatorGUI implements UpdatableView {
     }
 
     @Override
-    public void updateResultField(StackCalculator stackCalculator) {
-        resultField.setText(String.valueOf(stackCalculator.top()));
+    public void updateResultField(UpdatingModel updatingModel) {
+        resultField.setText(String.valueOf(updatingModel.showResult()));
         errorField.setText("");
     }
 

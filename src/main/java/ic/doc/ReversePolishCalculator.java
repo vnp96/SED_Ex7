@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 
-public class StackCalculator {
+public class ReversePolishCalculator implements UpdatingModel {
 
     private final Stack<Integer> stack = new Stack<>();
     private final List<UpdatableView> observers = new ArrayList<>();
@@ -21,9 +21,11 @@ public class StackCalculator {
         updateObservers();
     }
 
-    public int top() {
-        if (stack.isEmpty())
+    @Override
+    public int showResult() {
+        if (stack.isEmpty()) {
             return 0;
+        }
         return stack.peek();
     }
 
@@ -35,8 +37,9 @@ public class StackCalculator {
                 updateErrorInObservers(invalidArgumentException);
                 return;
             }
-            if (!evaluateExpression(character))
+            if (!evaluateExpression(character)) {
                 return;
+            }
         }
         updateObservers();
     }

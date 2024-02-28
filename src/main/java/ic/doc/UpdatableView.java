@@ -1,7 +1,7 @@
 package ic.doc;
 
 public interface UpdatableView {
-    void updateResultField(StackCalculator stackCalculator);
+    void updateResultField(UpdatingModel updatingModel);
 
     void updateError(Exception e);
 }
